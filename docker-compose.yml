@@ -1,0 +1,59 @@
+version: "3"
+services:
+  orders:
+    build:
+      dockerfile: dockerfile
+      context: ./orders
+    container_name: orders
+    ports:
+      - "8003:8003"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/orders/node_modules
+
+  recipe:
+    build:
+      dockerfile: dockerfile
+      context: ./recipe
+    container_name: recipe
+    ports:
+      - "8002:8002"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/recipe/node_modules
+
+  store:
+    build:
+      dockerfile: dockerfile
+      context: ./store
+    container_name: store
+    ports:
+      - "8001:8001"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/store/node_modules
+
+  gateway:
+    build:
+      dockerfile: dockerfile
+      context: ./gateway
+    container_name: gateway
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/gateway/node_modules
+  # nginx-proxy:
+  #   build:
+  #     dockerfile: dockerfile
+  #     context: ./proxy
+  #   depends_on:
+  #     - orders
+  #     - recipe
+  #     - store
+  #   ports:
+  #     - "80:80"

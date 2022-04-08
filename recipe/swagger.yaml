@@ -1,0 +1,207 @@
+openapi: 3.0.2
+info:
+  title: MS - RECIPES API
+  description: Documentación Microservice Recipe Api
+  version: "1.1"
+  contact:
+    name: Jean Osco
+    email: jean.osco@unmsm.edu.pe
+servers:
+  - url: http://localhost:8000/recipe
+    description: DEV
+  - url: https://bsale-api-v1.herokuapp.com/api
+    description: PROD
+paths:
+  /:
+    get:
+      description: Listado de Recetas
+      tags:
+        - Recipes
+      responses:
+        "200":
+          description: Respuesta OK consulta de Recetas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resRecipes"
+        "404":
+          description: Recetas no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+    post:
+      description: Registrar Receta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/reqRecipe"
+      tags:
+        - Recipes
+      responses:
+        "200":
+          description: Respuesta OK crear receta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resRecipeId"
+        "404":
+          description: Receta no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+
+  /{id}:
+    get:
+      tags:
+        - Recipes
+      parameters:
+        - in: path
+          name: id # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+          description: ID de la Receta
+      description: Detalle de la Receta obtenido por su Id
+      responses:
+        "200":
+          description: Respuesta OK de la consulta Receta por id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resRecipeId"
+        "404":
+          description: Receta no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+components:
+  schemas:
+    resRecipes:
+      type: object
+      properties:
+        recipes:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: 624f20a536db3647a8569b7e
+              name:
+                type: string
+                example: Hamburguesa Royal
+              ingredients:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 624cbb9d84680bd38d8ebb96
+                    name:
+                      type: string
+                      example: bebida energetica
+                    qty:
+                      type: number
+                      example: 5
+              status:
+                type: string
+                example: REQUEST
+              createdAt:
+                type: string
+                example: 2022-04-07T03
+              updatedAt:
+                type: string
+                example: 2022-04-07T03
+    resRecipeId:
+      type: object
+      properties:
+        orders:
+          type: object
+          properties:
+            _id:
+              type: string
+              example: 624f20a536db3647a8569b7e
+            name:
+              type: string
+              example: Hamburguesa Royal
+            ingredients:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 624cbb9d84680bd38d8ebb96
+                  name:
+                    type: string
+                    example: bebida energetica
+                  qty:
+                    type: number
+                    example: 5
+            status:
+              type: string
+              example: REQUEST
+            createdAt:
+              type: string
+              example: 2022-04-07T03
+            updatedAt:
+              type: string
+              example: 2022-04-07T03
+    resCustomError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Message Error"
+            code:
+              type: string
+              example: "ERROR - DETAILS ERROR"
+    reqRecipe:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Hamburguesa Royal
+        ingredients:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 624cbb9d84680bd38d8ebb96
+              name:
+                type: string
+                example: bebida energetica
+              qty:
+                type: number
+                example: 5

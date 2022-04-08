@@ -1,0 +1,324 @@
+openapi: 3.0.2
+info:
+  title: MS - STORE API
+  description: Documentación Microservice Store Api
+  version: "1.1"
+  contact:
+    name: Jean Osco
+    email: jean.osco@unmsm.edu.pe
+servers:
+  - url: http://localhost:8000/store
+    description: DEV
+  - url: https://bsale-api-v1.herokuapp.com/api
+    description: PROD
+paths:
+  /:
+    get:
+      description: Listado de Ingredientes
+      tags:
+        - Ingredients
+      responses:
+        "200":
+          description: Respuesta OK consulta de Ingredientes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resIngredients"
+        "404":
+          description: Ingredientes no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+    post:
+      description: Registrar Ingrediente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/reqIngredient"
+      tags:
+        - Ingredients
+      responses:
+        "200":
+          description: Respuesta OK crear Ingrediente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resIngredientId"
+        "404":
+          description: Ingrediente no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+
+  /{id}:
+    get:
+      tags:
+        - Ingredients
+      parameters:
+        - in: path
+          name: id # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+          description: ID del Ingrediente
+      description: Detalle del Ingrediente obtenido por su Id
+      responses:
+        "200":
+          description: Respuesta OK de la consulta Ingrediente por id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resIngredientId"
+        "404":
+          description: Receta no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+
+  /list:
+    get:
+      description: Listado de Compras
+      tags:
+        - Shopping
+      responses:
+        "200":
+          description: Respuesta OK consulta de Compras
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resShoppings"
+        "404":
+          description: Compras no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+    post:
+      description: Registrar Compra
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/reqShopping"
+      tags:
+        - Shopping
+      responses:
+        "200":
+          description: Respuesta OK crear Compra
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resIngredientId"
+        "404":
+          description: Compra no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+
+  /list/{id}:
+    get:
+      tags:
+        - Shopping
+      parameters:
+        - in: path
+          name: id # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+          description: ID de la Receta
+      description: Detalle de la Receta obtenido por su Id
+      responses:
+        "200":
+          description: Respuesta OK de la consulta Receta por id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resShoppingId"
+        "404":
+          description: Receta no encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+        "500":
+          description: Error del servicio no controlado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resCustomError"
+components:
+  schemas:
+    resIngredients:
+      type: object
+      properties:
+        ingredients:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: 624cbb9d84680bd38d8ebb96
+              name:
+                type: string
+                example: cheese
+              qty:
+                type: number
+                example: 5
+              createdAt:
+                type: string
+                example: 2022-04-07T03
+              updatedAt:
+                type: string
+                example: 2022-04-07T03
+    resIngredientId:
+      type: object
+      properties:
+        orders:
+          type: object
+          properties:
+            _id:
+              type: string
+              example: 624cbb9d84680bd38d8ebb96
+            name:
+              type: string
+              example: cheese
+            qty:
+              type: number
+              example: 5
+            createdAt:
+              type: string
+              example: 2022-04-07T03
+            updatedAt:
+              type: string
+              example: 2022-04-07T03
+    resShoppings:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: 624cbb9d84680bd38d8ebb96
+              ingredient:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 624cbb8f84680bd38d8ebb92
+                  name:
+                    type: string
+                    example: cheese
+                  qty:
+                    type: number
+                    example: 5
+                  createdAt:
+                    type: string
+                    example: 2022-04-07T03
+                  updatedAt:
+                    type: string
+                    example: 2022-04-07T03
+              qty:
+                type: number
+                example: 5
+              createdAt:
+                type: string
+                example: 2022-04-07T03
+              updatedAt:
+                type: string
+                example: 2022-04-07T03
+    resShoppingId:
+      type: object
+      properties:
+        order:
+          type: object
+          properties:
+            _id:
+              type: string
+              example: 624cbb8f84680bd38d8ebb92
+            name:
+              type: string
+              example: cheese
+            qty:
+              type: number
+              example: 5
+            createdAt:
+              type: string
+              example: 2022-04-07T03
+            updatedAt:
+              type: string
+              example: 2022-04-07T03
+    resCustomError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Message Error"
+            code:
+              type: string
+              example: "ERROR - DETAILS ERROR"
+    reqIngredient:
+      type: object
+      properties:
+        name:
+          type: string
+          example: cheese
+        qty:
+          type: number
+          example: 5
+    reqShopping:
+      type: object
+      properties:
+        ingredient:
+          type: string
+          example: 624cbb8f84680bd38d8ebb92
+        qty:
+          type: number
+          example: 5
