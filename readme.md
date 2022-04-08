@@ -8,7 +8,7 @@ Application to manage food dishes, storage and recipes built under a microservic
 
 ## Component Diagram
 
-- 👉 Diagram [http://3.82.162.195:8000](http://3.82.162.195:8000/)
+- 👉 [Diagram](https://user-images.githubusercontent.com/61263958/162535170-e7deacba-ba26-4f53-b242-b65d233a146c.png)
 
 ## Demo Website
 
